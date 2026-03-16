@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dành Tặng Em</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tối ưu hóa hiệu ứng chuyển động mượt mà */
+        .fade-in-up {
+            animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Hiệu ứng hạt nền chuyển động liên tục tạo cảm giác không gian */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+
+        /* Kiến trúc Pure CSS cho hình trái tim */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            width: 20px;
+            height: 20px;
+            background-color: currentColor;
+            transform: rotate(-45deg);
+            animation: floatUp linear forwards;
+            will-change: transform, opacity;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: currentColor;
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -10px; left: 0; }
+        .heart::after { top: 0; left: 10px; }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(-45deg) scale(var(--scale));
+                opacity: 1;
+                left: var(--startX);
+            }
+            100% {
+                transform: translateY(-120vh) rotate(-45deg) scale(var(--scale));
+                opacity: 0;
+                left: var(--endX);
+            }
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen flex items-center justify-center font-sans antialiased relative overflow-hidden text-gray-800">
+
+    <div id="heart-container" class="absolute inset-0 pointer-events-none z-0"></div>
+
+    <div class="absolute top-20 left-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-blob"></div>
+    <div class="absolute top-20 right-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-blob animation-delay-2000"></div>
+
+    <div class="relative z-10 bg-white bg-opacity-40 backdrop-blur-lg p-10 rounded-3xl shadow-2xl max-w-lg w-full text-center border border-white border-opacity-50 transition-all duration-500 hover:shadow-pink-200/50">
+        
+        <div id="initial-view">
+            <h1 class="text-4xl font-extrabold text-pink-600 mb-4 tracking-tight">Gửi Vk Yêu</h1>
+            <p class="text-lg text-gray-700 mb-8 font-light leading-relaxed">
+                Có một vài điều anh muốn nói với vk ngày hôm nay...
+            </p>
+            <button id="reveal-btn" class="bg-pink-400 hover:bg-pink-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-pink-300/50 focus:outline-none focus:ring-4 focus:ring-pink-200">
+                Vk nhấn vào đây nhé
+            </button>
+        </div>
+
+        <div id="message-view" class="hidden">
+            <h2 class="text-2xl font-bold text-pink-700 mb-4 fade-in-up">Em là điều tuyệt vời nhất!</h2>
+            <p class="text-gray-800 text-lg leading-relaxed fade-in-up" style="animation-delay: 0.2s; opacity: 0;">
+                Cảm ơn em vì đã luôn ở đó, mang lại sự ấm áp và bình yên. Mỗi khoảnh khắc bên em đều là một món quà vô giá. Mong Vk sẽ mãi yêu anh như bây giờ, Mọi thứ anh có được ngày hôm nay đều có sự giúp đỡ của em, Yêu em nhiều..
+            </p>
+            <div class="mt-8 fade-in-up" style="animation-delay: 0.4s; opacity: 0;">
+                <span class="inline-block bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-medium tracking-wide">
+                    Mãi yêu em
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealBtn = document.getElementById('reveal-btn');
+            const initialView = document.getElementById('initial-view');
+            const messageView = document.getElementById('message-view');
+            const heartContainer = document.getElementById('heart-container');
+
+            function startHeartAnimation() {
+                const colors = ['#e11d48', '#be123c', '#f43f5e', '#fb7185', '#ff8fab'];
+
+                function createHeart() {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+
+                    const size = Math.random() * 0.8 + 0.4;
+                    const duration = Math.random() * 4 + 3; // Thời gian bay 3s - 7s
+                    const startX = Math.random() * 100;
+                    const endX = startX + (Math.random() * 20 - 10);
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+
+                    heart.style.setProperty('--scale', size);
+                    heart.style.setProperty('--startX', `${startX}vw`);
+                    heart.style.setProperty('--endX', `${endX}vw`);
+                    heart.style.color = color;
+                    heart.style.animationDuration = `${duration}s`;
+
+                    heartContainer.appendChild(heart);
+
+                    setTimeout(() => {
+                        heart.remove();
+                    }, duration * 1000);
+                }
+
+                // Hiệu ứng bùng nổ: Tạo nhanh 20 trái tim cùng lúc khi vừa chuyển trang
+                for(let i = 0; i < 20; i++) {
+                    setTimeout(createHeart, Math.random() * 500);
+                }
+
+                // Hiệu ứng duy trì: Tạo đều đặn 1 trái tim mỗi 150ms
+                setInterval(createHeart, 150);
+            }
+
+            revealBtn.addEventListener('click', () => {
+                // Ẩn view ban đầu với hiệu ứng mờ dần
+                initialView.style.transition = "opacity 0.4s ease";
+                initialView.style.opacity = "0";
+                
+                setTimeout(() => {
+                    initialView.classList.add('hidden');
+                    messageView.classList.remove('hidden');
+                    
+                    // Kích hoạt hiệu ứng trái tim ngay khi hiển thị thông điệp
+                    startHeartAnimation();
+                }, 400);
+            });
+        });
+    </script>
+</body>
+</html>
